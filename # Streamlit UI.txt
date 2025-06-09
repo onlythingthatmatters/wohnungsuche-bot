@@ -1,0 +1,25 @@
+# Streamlit UI
+st.title("Wohnungs-Such-Bot")
+st.write("Finde provisionsfreie Wohnungen aus mehreren Quellen.")
+
+stadt = st.text_input("Stadt", value="Berlin")
+miete_max = st.number_input("Max. Miete (€)", value=800)
+zimmer_min = st.number_input("Min. Anzahl Zimmer", value=2)
+qm_min = st.number_input("Min. Quadratmeter", value=45)
+arbeitsadresse = st.text_input("Arbeitsadresse", value="Potsdamer Platz, Berlin")
+api_key = st.text_input("Google Maps API Key", type="password")
+
+if st.button("Jetzt suchen"):
+    st.info("Suche läuft...")
+    ergebnisse = suche_wohnungen(stadt, miete_max, zimmer_min, qm_min, arbeitsadresse, api_key)
+
+    if not ergebnisse:
+        st.warning("Keine passenden Ergebnisse gefunden.")
+    else:
+        for titel, link, entfernung, preis, qm in ergebnisse:
+            st.markdown(f"**{titel}**")
+            st.markdown(f"➡️ [Ansehen]({link})")
+            st.markdown(f"💶 Miete: **{preis} €**")
+            st.markdown(f"📏 Fläche: **{qm} m²**")
+            st.markdown(f"🚌 Entfernung zum Arbeitsplatz: {entfernung}")
+            st.markdown("---")
